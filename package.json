@@ -1,0 +1,28 @@
+{
+  "name": "luvhateserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "initiateDB.js",
+  "dependencies": {
+    "body-parser": "^1.9.2",
+    "compression": "^1.2.0",
+    "connect": "^3.3.2",
+    "connect-logger": "^0.0.1",
+    "cookie-session": "^1.0.2",
+    "elasticsearch": "^3.0.0",
+    "formidable": "^1.0.15",
+    "mongodb": "^1.4.19",
+    "mongojs": "^0.15.1",
+    "multiparty": "^4.0.0",
+    "restify": "^2.8.3",
+    "serve-static": "^1.7.1",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Prashant Jha",
+  "license": "ISC"
+}
