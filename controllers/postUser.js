@@ -7,10 +7,28 @@ module.exports = (function(){
 
 		User.findByFbId(fbId, function(docs){
 			if(docs.length > 0){
-				res.writeHead(200,{
-					'Content-Type': 'text/json'
+				var userToUpdate = new User(docs[0]);
+				var updateParams = req.body;
+				var response;
+				for(item in updateParams){
+					userToUpdate[item] = updateParams[item];
+				};
+				userToUpdate.save(function(saved){
+					if(!saved){
+						res.writeHead(400,{
+							'Content-Type': 'text/json'
+						});
+						res.end(JSON.stringify(userToUpdate.errors));
+					}else{
+						response = userToUpdate.dump();
+						res.writeHead(200,{
+							'Content-Type': 'text/json'
+						});
+						
+						res.end(JSON.stringify(response));
+					}
 				});
-				res.end(JSON.stringify(docs[0]));
+				
 			}else{
 				var newUser = new User(req.body);
 				// console.log("...got it..aafter",newUser);
