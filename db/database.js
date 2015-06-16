@@ -103,6 +103,12 @@ module.exports = (function(){
 
 	};
 
+	Database.deleteRows = function(collectionName, options, callback){
+		options = options ? options : {};
+		options['method'] = 'remove';
+		Database.exec(collectionName, options, callback);
+	}
+
 	Database.exec = function(collectionName, options, callback){
 		// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",options);
 		// console.log('4');
@@ -128,7 +134,6 @@ module.exports = (function(){
 		// console.log('6',collection[method]);
 		// console.log('7',criteria);
 		// criteria = {key:{'location.position':true}, initial : {arr:[]} ,reduce: function(doc, prev){return prev.arr.push(doc)}, query:{"location.position":{"$nearSphere":{"$geometry":{"type":"Point","coordinates":[77.595644,12.888234]},"$maxDistance":0.2}}}},{}
-		console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",criteria, projection);
 		if(method === 'group' ){
 			collection[method](criteria, function(err, docs){
 				if(err){

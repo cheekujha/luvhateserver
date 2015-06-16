@@ -49,7 +49,7 @@ module.exports = (function(){
 	}
 
 	Model.findAll = function(options, callback){
-		// console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",JSON.stringify(options));
+		
 		var collectionName = this._collection_name;
 		database.findAll(collectionName, options, callback);
 	}
@@ -69,6 +69,10 @@ module.exports = (function(){
 		var collectionName = this._collection_name;
 		database.findAndGroup(collectionName, options, callback);	
 	}
+
+	Model.deleteRows = function(options, callback) {
+		database.deleteRows(this._collection_name, options, callback);
+	};
 
 	/*---------------Class Methods--------------------*/
 

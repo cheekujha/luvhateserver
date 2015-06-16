@@ -1,6 +1,9 @@
 module.exports = (function(){
 	var User = require("../models/User.js");
 	var FbRelation = require("../models/FbRelation.js");
+	var NotificationRelation = require("../models/NotificationRelation.js");
+	var NotificationService = require("../services/NotificationService.js");
+	var gcm = require('node-gcm');
 	
 
 	function updateFbRelation(seed, updateParams, callback){
@@ -58,6 +61,8 @@ module.exports = (function(){
 						res.writeHead(200,{
 							'Content-Type': 'text/json'
 						});
+						//console.log("****************************************************************");
+						sendPushNotification(fbRelation);
 						res.end(JSON.stringify(fbRelation));
 					}
 				});
@@ -86,6 +91,7 @@ module.exports = (function(){
 									});
 									res.end({message : "DB Error"});
 								}else{
+									sendPushNotification(fbRelation);
 									res.writeHead(200,{
 										'Content-Type': 'text/json'
 									});
@@ -98,5 +104,46 @@ module.exports = (function(){
 			}
 		});	
 	}
+
+	function sendPushNotification(relation){
+		var receiverId = relation.receiver_id;
+		// console.log("..............................",receiverId);
+		NotificationRelation.findByUserId(receiverId, function(docs){
+			// console.log("...........................",docs);
+			if(docs && docs.length > 0){
+				var i,l, registrationIdsArray = [];
+				for(i=0,l=docs.length; i<l; i=i+1){
+					registrationIdsArray.push(docs[i]["registration_id"]);
+					// var aa = docs[i]["registration_id"];
+					// NotificationService.sendNotification(aa, sendNotificationCallback);
+				}
+				if(registrationIdsArray.length > 0){
+					NotificationService.sendNotification(registrationIdsArray, sendNotificationCallback);
+				}
+			}else{
+				return;
+			}
+		});
+
+	}
+
+
+	function sendNotificationCallback(success, deleteEntries, results, receiverIdArray){
+		if(deleteEntries && results && results.length > 0){
+			var i,l = results.length;
+			for(i=0; i<l; i=i+1){
+				var idToDelete = results[i]['registration_id'];
+				console.log(">>>>>>>>>>>>>>ID to DELETE>>>>>>>>>>>>>>>>>>",receiverIdArray[i]);
+				if(idToDelete){
+					NotificationRelation.deleteRows({where : {'registration_id' : receiverIdArray[i]}}, function(){
+						// NotificationService.sendNotification([idToDelete], sendNotificationCallback);
+					});
+				}
+				
+			}
+		}
+	}
+
+
 	return postFbRelation;
 }());
