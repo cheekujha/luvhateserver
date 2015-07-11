@@ -37,6 +37,11 @@ server.on('uncaughtException',function(request, response, route, error){
 
 routes(server);
 
+server.get(/webpage\/.*/, restify.serveStatic({
+    'directory': 'webpage',
+    'default': 'index.html'
+ }));
+
 server.listen(7700, function(){
 	console.log("Server created", server.url);
 });
