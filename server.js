@@ -37,7 +37,7 @@ server.on('uncaughtException',function(request, response, route, error){
 
 routes(server);
 
-server.get(/webpage\/.*/, restify.serveStatic({
+server.get(/.*/, restify.serveStatic({
     'directory': 'webpage',
     'default': 'index.html'
  }));
