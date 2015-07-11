@@ -1,7 +1,4 @@
 var restify = require('restify');
-var projectName = "luvhate";
-
-var routes = require('./router');
 var _ = require('underscore');
 var server = restify.createServer();
 
@@ -30,14 +27,13 @@ server.use(function (req, res, next) {
   next();
 });
 
-server.on('uncaughtException',function(request, response, route, error){
-  console.error(error.stack);
-  response.send(error);
-});
 
-routes(server);
+server.get(/.*/, restify.serveStatic({
+    'directory': 'webpage',
+    'default': 'index.html'
+ }));
 
-server.listen(80, function(){
+server.listen(7700, function(){
 	console.log("Server created", server.url);
 });
 
