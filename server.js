@@ -1,15 +1,16 @@
 var restify = require('restify');
 var projectName = "luvhate";
-var server = restify.createServer();
+
 var routes = require('./router');
 var _ = require('underscore');
+var server = restify.createServer();
 
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.jsonBodyParser());
 // server.use(restify.bodyParser({ mapParams: false }));
-
 // Add headers
+// server.use(ecstatic({ root: __dirname + '/webpage' }));
 server.use(function (req, res, next) {
 
   // Website you wish to allow to connect
@@ -29,6 +30,10 @@ server.use(function (req, res, next) {
   next();
 });
 
+server.get(/.*/, restify.serveStatic({
+    'directory': 'webpage',
+    'default': 'index.html'
+ }));
 
 server.on('uncaughtException',function(request, response, route, error){
   console.error(error.stack);
@@ -37,7 +42,7 @@ server.on('uncaughtException',function(request, response, route, error){
 
 routes(server);
 
-server.listen(80, function(){
+server.listen(7700, function(){
 	console.log("Server created", server.url);
 });
 
