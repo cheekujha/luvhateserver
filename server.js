@@ -42,7 +42,7 @@ server.on('uncaughtException',function(request, response, route, error){
 
 routes(server);
 
-server.listen(7700, function(){
+server.listen(80, function(){
 	console.log("Server created", server.url);
 });
 
